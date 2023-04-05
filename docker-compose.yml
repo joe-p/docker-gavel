@@ -1,0 +1,32 @@
+version: '3'
+services:
+  gavel:
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+      ADMIN_PASSWORD: admin
+      EMAIL_FROM: ${EMAIL_FROM}
+      EMAIL_USER: apikey
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_HOST: smtp.sendgrid.net
+      SECRET_KEY: ${SECRET_KEY}
+      REDIS_URL: redis://gavel-redis:6379/0
+      DB_URI: postgresql://gavel:gavel@gavel-db/gavel
+    restart: unless-stopped
+    
+  gavel-db:
+    image: "postgres:14.2-bullseye"
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: gavel
+      POSTGRES_PASSWORD: gavel
+      POSTGRES_DB: gavel
+    restart: unless-stopped
+
+  gavel-redis:
+    image: "redis"
+    expose:
+      - 6379
+    restart: unless-stopped
