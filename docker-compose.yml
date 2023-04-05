@@ -30,3 +30,13 @@ services:
     expose:
       - 6379
     restart: unless-stopped
+
+  gavel-caddy:
+    image: caddy:2-alpine
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
